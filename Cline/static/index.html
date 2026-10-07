@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finanças Pessoais</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #4ade80;
+      --red: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #334155;
+    }
+    header h1 { margin: 0; font-size: 1.4rem; }
+    main { padding: 2rem; max-width: 1100px; margin: 0 auto; }
+    .panel {
+      background: var(--card);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .upload-area {
+      border: 2px dashed #475569;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s;
+    }
+    .upload-area:hover { border-color: var(--accent); }
+    .upload-area.dragover { border-color: var(--accent); background: #0f172a; }
+    button {
+      background: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: .6rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .summary { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .stat {
+      flex: 1 1 160px;
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat .label { color: var(--muted); font-size: .8rem; text-transform: uppercase; }
+    .stat .value { font-size: 1.5rem; font-weight: 700; margin-top: .3rem; }
+    .positive { color: var(--green); }
+    .negative { color: var(--red); }
+    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+    th, td { text-align: left; padding: .5rem; border-bottom: 1px solid #334155; }
+    th { color: var(--muted); font-size: .8rem; text-transform: uppercase; }
+    td.amount { text-align: right; font-variant-numeric: tabular-nums; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .75rem;
+      background: #334155;
+    }
+    .row-actions { display: flex; gap: .5rem; }
+    .hidden { display: none; }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: .7rem;
+      background: #334155;
+      color: var(--accent);
+    }
+    .error { color: var(--red); margin-top: .5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Finanças Pessoais</h1>
+    <nav><a href="/estoque" style="color:var(--accent);font-size:.9rem">Estoque →</a></nav>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>Importar CSV</h2>
+      <p style="color:var(--muted);font-size:.85rem;">
+        Formato: <code>data,descricao,valor</code> (data em YYYY-MM-DD; valor positivo=receita, negativo=despesa).
+      </p>
+      <div id="upload" class="upload-area">
+        <input type="file" id="fileInput" accept=".csv,text/csv" class="hidden" />
+        <span>Clique ou arraste um arquivo CSV</span>
+      </div>
+      <button id="importBtn" disabled>Importar</button>
+      <span id="importStatus"></span>
+      <div id="importDetail" class="error"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Resumo</h2>
+      <div class="summary" id="summaryStats"></div>
+      <h3 style="margin-top:1.2rem">Total por categoria</h3>
+      <table id="catTable">
+        <thead><tr><th>Categoria</th><th style="text-align:right">Total</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Transações</h2>
+      <div class="row-actions" style="margin-bottom:1rem">
+        <input type="month" id="monthFilter" />
+        <input type="text" id="catFilter" list="catList" placeholder="Filtrar categoria" />
+        <datalist id="catList"></datalist>
+        <button id="applyFilters">Aplicar</button>
+        <button id="clearFilters">Limpar</button>
+      </div>
+      <table id="txTable">
+        <thead><tr><th>Data</th><th>Descrição</th><th><span class="pill">Categoria</span></th><th style="text-align:right">Valor</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estoque — Registro de inventário</title>
+  <link rel="stylesheet" href="/static/estoque.css" />
+</head>
+<body>
+  <header>
+    <h1>Estoque — Inventário</h1>
+    <nav>
+      <a href="/">Finanças</a>
+      <a href="/estoque">Estoque</a>
+    </nav>
+  </header>
+  <main>
+    <section class="panel">
+      <h2 style="margin-top:0">Novo item</h2>
+      <form id="stockForm" class="grid" novalidate>
+        <div class="full">
+          <label for="productName">Produto</label>
+          <input id="productName" name="product_name" type="text" required
+                 placeholder="Ex.: Mouse sem fio, Arroz 5kg" autocomplete="off" />
+          <div class="hint">O tipo é detectado automaticamente (Eletrônicos, Alimentos, Limpeza, Escritório, Ferramentas, Outros).</div>
+          <div class="error-text" id="errName"></div>
+        </div>
+        <div>
+          <label for="quantity">Quantidade</label>
+          <input id="quantity" name="quantity" type="number" inputmode="decimal"
+                 min="0" step="any" required placeholder="0" />
+          <div class="error-text" id="errQty"></div>
+        </div>
+        <div>
+          <label for="unitPrice">Preço unitário (R$)</label>
+          <input id="unitPrice" name="unit_price" type="number" inputmode="decimal"
+                 min="0" step="0.01" required placeholder="0,00" />
+          <div class="error-text" id="errPrice"></div>
+        </div>
+        <div class="full actions">
+          <button type="submit" id="saveBtn">Registrar item</button>
+          <a href="/estoque.xlsx"><button type="button" class="secondary" id="excelBtn">Baixar Excel</button></a>
+        </div>
+      </form>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="panel">
+      <h2 style="margin-top:0">Agrupado por tipo</h2>
+      <div class="groups" id="groups"></div>
+    </section>
+
+    <section class="panel">
+      <h2 style="margin-top:0">Itens registrados</h2>
+      <div class="actions" style="margin-bottom:.5rem">
+        <input type="text" id="typeFilter" list="typeList" placeholder="Filtrar por tipo"
+               style="max-width:220px" />
+        <datalist id="typeList"></datalist>
+        <button type="button" class="secondary" id="applyFilter">Aplicar</button>
+        <button type="button" class="secondary" id="clearFilter">Limpar</button>
+      </div>
+      <div class="table-wrap">
+        <table id="itemsTable">
+          <thead><tr>
+            <th>Produto</th><th>Tipo</th>
+            <th style="text-align:right">Qtd</th>
+            <th style="text-align:right">Preço</th>
+            <th>Registrado em</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="/static/estoque.js"></script>
+</body>
+</html>
